@@ -1,0 +1,122 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="theme-color" content="#05030A" />
+  <meta name="description" content="ASADCORE — A mind-expanding journey through my world, my chaos, my universe. A cinematic WebGL experience." />
+  <title>ASADCORE — Enter the Core</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpath fill='%238B3DFF' d='M32 2l7 23 23 7-23 7-7 23-7-23-23-7 23-7z'/%3E%3C/svg%3E" />
+</head>
+<body>
+  <div id="loader" class="loader">
+    <div class="loader-bg"></div>
+    <div class="loader-core">
+      <svg class="morph-logo" viewBox="0 0 120 120" aria-hidden="true"><path id="morphPath" d="M60 6 L72 48 L114 60 L72 72 L60 114 L48 72 L6 60 L48 48 Z" fill="none" stroke="#b26bff" stroke-width="2"/><circle cx="60" cy="60" r="7" fill="#e9d5ff"/></svg>
+      <div class="loader-word">ASADCORE</div>
+      <div class="loader-percent"><span id="loadPct">0</span><small>%</small></div>
+      <div class="loader-bar"><i id="loadBar"></i></div>
+      <button id="enterBtn" class="enter-btn" disabled><span>ENTER</span><i></i></button>
+      <div class="sound-hint">🔊 Sound On · headphones recommended</div>
+      <div id="returnMsg" class="return-msg"></div>
+    </div>
+  </div>
+
+  <canvas id="webgl" aria-label="ASADCORE interactive 3D universe"></canvas>
+  <div class="fallback-bg" aria-hidden="true"></div>
+  <div class="grain" aria-hidden="true"></div>
+  <div id="cursor" class="cursor" aria-hidden="true"><i></i></div>
+  <div id="cursorTrail" class="cursor-trail" aria-hidden="true"></div>
+
+  <header class="topbar ui-layer">
+    <a class="brand magnetic" href="#" data-nav="home" aria-label="ASADCORE home">
+      <svg viewBox="0 0 64 64" class="brand-star"><path d="M32 3l7.5 21.5L61 32l-21.5 7.5L32 61l-7.5-21.5L3 32l21.5-7.5z" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M32 18l4 10 10 4-10 4-4 10-4-10-10-4 10-4z" fill="currentColor"/></svg>
+      <span>ASADCORE</span>
+    </a>
+    <label class="search glass"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7" fill="none" stroke="currentColor" stroke-width="1.7"/><path d="M16.5 16.5L21 21" stroke="currentColor" stroke-width="1.7"/></svg><input id="searchInput" type="search" placeholder="Search anything..." autocomplete="off"/><kbd>⌘K</kbd></label>
+    <div id="searchResults" class="search-results glass" hidden></div>
+    <nav class="pillnav glass" aria-label="Primary">
+      <button class="nav-link active magnetic" data-nav="home"><i class="dot"></i>Home</button>
+      <div class="nav-drop"><button class="nav-link magnetic" data-drop="explore">Explore <span>⌄</span></button><div class="drop-menu glass" id="drop-explore"><button data-nav="history">History</button><button data-nav="videos">Videos</button><button data-nav="music">Music</button><button data-nav="incidents">Incidents</button><button data-nav="street">Street View</button><button data-nav="cinema">Cinema</button><button data-nav="ocean">Void Ocean</button></div></div>
+      <div class="nav-drop"><button class="nav-link magnetic" data-drop="experience">Experience <span>⌄</span></button><div class="drop-menu glass" id="drop-experience"><button data-nav="deep">Get Lost in the Deep</button><button data-nav="secret">The Hidden Door</button></div></div>
+      <button class="nav-link magnetic" data-nav="about">About</button>
+    </nav>
+    <div class="top-actions">
+      <button id="muteBtn" class="icon-btn glass magnetic" aria-label="Mute sound" title="Mute / unmute"><svg viewBox="0 0 24 24"><path d="M4 9v6h4l5 4V5L8 9H4z" fill="currentColor"/><path class="sound-waves" d="M16 8c1.5 1 1.5 7 0 8M18.5 5.5c3 3 3 10 0 13" fill="none" stroke="currentColor" stroke-width="1.6"/><path class="mute-x" d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="1.8" style="display:none"/></svg></button>
+      <button id="bellBtn" class="icon-btn glass magnetic" aria-label="Notifications"><svg viewBox="0 0 24 24"><path d="M6 16v-5a6 6 0 1112 0v5l2 2H4l2-2zM10 20a2 2 0 004 0" fill="none" stroke="currentColor" stroke-width="1.6"/></svg><i class="badge"></i></button>
+      <button id="avatarBtn" class="avatar magnetic" aria-label="Profile and secrets"><img alt="Explorer avatar" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%231a0b2e'/%3E%3Ccircle cx='32' cy='24' r='12' fill='%23b26bff'/%3E%3Cpath d='M10 60c2-16 42-16 44 0' fill='%238b3dff'/%3E%3C/svg%3E"/></button>
+    </div>
+    <div id="notifPanel" class="notif-panel glass" hidden><h4>Signals from the core</h4><p>◆ The river remembers. A new whisper has surfaced.</p><p>◆ Seven secrets are hidden across the universe.</p><p>◆ Your soundtrack is generated live — no two visits sound alike.</p></div>
+    <div id="profilePanel" class="profile-panel glass" hidden><h4>Explorer</h4><div class="secrets-count">Secrets found: <b id="secretCount">0</b>/7</div><div class="secret-dots" id="secretDots"></div><p id="lastVisit"></p><button id="resetSecrets" class="text-btn">Reset discoveries</button></div>
+  </header>
+
+  <main id="homeUI" class="home-ui ui-layer">
+    <section class="hero" id="hero">
+      <div class="scroll-indicator"><span>SCROLL</span><i></i><b></b></div>
+      <div class="hero-copy">
+        <div class="mono-label split">// ENTER THE CORE — EXPLORE, FEEL, GET LOST //</div>
+        <h1 class="wordmark" aria-label="ASADCORE"><span>A</span><span>S</span><span>A</span><span>D</span><span>C</span><span class="o-star" id="heroStar" role="button" tabindex="0" aria-label="Hidden star"><svg viewBox="0 0 100 100"><path d="M50 2l10 38 38 10-38 10-10 38-10-38-38-10 38-10z" fill="none" stroke="currentColor" stroke-width="5"/><circle cx="50" cy="50" r="9" fill="currentColor"/></svg></span><span>R</span><span>E</span></h1>
+        <p class="tagline">A Mind-Expanding Journey Through<br/>My World, My Chaos, My Universe.</p>
+        <div class="hero-ctas">
+          <button class="btn-primary magnetic" data-nav="deep"><span class="spiral">◎</span> Get Lost in the Deep <span class="arrow">→</span></button>
+          <button class="btn-glass magnetic" id="trailerBtn"><span class="play-tri">▶</span> Watch Trailer</button>
+        </div>
+        <div class="vibe"><div class="waveform" id="waveform"></div><span>Feel the Vibe...</span><i></i></div>
+      </div>
+
+      <aside class="explore-panel glass" aria-label="Explore ASADCORE">
+        <button class="explore-card" data-nav="history"><span class="thumb thumb-history"></span><span class="ec-text"><b>History</b><small>Roots of the chaos</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="videos"><span class="thumb thumb-videos">▶</span><span class="ec-text"><b>Videos</b><small>Watch the madness</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="music"><span class="thumb thumb-music">♫</span><span class="ec-text"><b>Music</b><small>Feel the rhythm</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="incidents"><span class="thumb thumb-incidents">NEWS</span><span class="ec-text"><b>Incidents</b><small>Real &amp; unreal</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="street"><span class="thumb thumb-street"></span><span class="ec-text"><b>Street View</b><small>Walk the streets</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="cinema"><span class="thumb thumb-cinema">🎬</span><span class="ec-text"><b>Cinema</b><small>Trailers, news &amp; releases</small></span><span class="chev">›</span></button>
+        <button class="explore-card highlighted" data-nav="deep"><span class="thumb thumb-deep"></span><span class="ec-text"><b>Get Lost<br/>in the Deep</b><small>Dive into the unknown</small></span><span class="chev">›</span></button>
+        <button class="explore-card" data-nav="ocean"><span class="thumb thumb-ocean">🌊</span><span class="ec-text"><b>Void Ocean</b><small>Swim the liquid space</small></span><span class="chev">›</span></button>
+      </aside>
+
+      <div class="player glass" id="miniPlayer">
+        <div class="player-top"><span class="cover" id="coverArt"></span><div class="track-meta"><b id="trackTitle">ASADCORE Vibes</b><small id="trackSub">Original Mix</small></div></div>
+        <div class="progress-row"><span id="curTime">00:00</span><input id="seek" type="range" min="0" max="1000" value="0" aria-label="Seek"/><span id="durTime">03:42</span></div>
+        <div class="controls"><button id="shuffleBtn" class="ctl" aria-label="Shuffle">⇄</button><button id="prevBtn" class="ctl" aria-label="Previous">⏮</button><button id="playBtn" class="ctl play" aria-label="Play / pause"><span>❚❚</span></button><button id="nextBtn" class="ctl" aria-label="Next">⏭</button><button id="repeatBtn" class="ctl" aria-label="Repeat">⟳</button><div class="eq" id="eq"></div></div>
+      </div>
+
+      <div class="welcome glass"><span class="welcome-avatar"></span><div><b id="welcomeTitle">Welcome to ASADCORE</b><small>A digital universe where reality meets imagination.</small></div><button class="join-btn magnetic" id="joinBtn">Join the journey <span>→</span></button></div>
+
+      <div class="globe-wrap"><canvas id="globe" width="220" height="220" aria-label="Rotating wireframe globe"></canvas><button class="globe-btn glass magnetic" data-nav="street"><small>EXPLORE</small><b>THE WORLD</b><span>↗</span></button></div>
+
+      <div class="ticker glass"><span class="latest"><i></i>Latest:</span><div class="ticker-track"><div id="tickerContent"></div></div></div>
+    </section>
+
+    <section class="dashboard" id="dashboard">
+      <div class="dash-head"><div><h2 class="scramble" data-text="Explore Hub">Explore Hub</h2><p>Dive into different layers of ASADCORE.</p></div><span class="mono-label">A WORLD OF ENDLESS DISCOVERY_</span></div>
+      <div class="hub-grid">
+        <button class="hub-card glass" data-nav="history"><span class="hub-art art-history"></span><b>History</b><small>Travel through time &amp; explore the past.</small><i>Explore →</i></button>
+        <button class="hub-card glass" data-nav="videos"><span class="hub-art art-videos">▶</span><b>Videos</b><small>Watch stories, documentaries &amp; visual journeys.</small><i>Explore →</i></button>
+        <button class="hub-card glass" data-nav="music"><span class="hub-art art-music">♫</span><b>Music</b><small>Feel the rhythm of ASADCORE.</small><i>Explore →</i></button>
+        <button class="hub-card glass" data-nav="incidents"><span class="hub-art art-incidents"></span><b>Incidents</b><small>Real &amp; unreal events.</small><i>Explore →</i></button>
+        <button class="hub-card glass" data-nav="street"><span class="hub-art art-street"></span><b>Street View</b><small>Walk the streets virtually.</small><i>Explore →</i></button>
+        <button class="hub-card glass" data-nav="cinema"><span class="hub-art art-cinema">🎬</span><b>Cinema</b><small>Live movie news, trailers &amp; releases.</small><i>Explore →</i></button>
+        <button class="hub-card glass glow" data-nav="deep"><span class="hub-art art-deep"></span><b>Get Lost in the Deep</b><small>Enter the unknown.</small><i>Dive In →</i></button>
+        <button class="hub-card glass" data-nav="ocean"><span class="hub-art art-ocean">🌊</span><b>Void Ocean</b><small>Swim through liquid space.</small><i>Dive In →</i></button>
+      </div>
+      <div class="dash-lower">
+        <div class="about-card glass" id="about"><span class="mono-label">// ABOUT ASADCORE</span><h3>More than a website — it’s a universe.</h3><p>ASADCORE is a digital space for dreamers, explorers and the curious. A place where history, art and imagination live together. Old Dhaka’s streets, rickshaw bells and Bangla whispers folded into a dark-cosmic world.</p><button class="btn-glass magnetic" id="aboutMore">Learn More →</button></div>
+        <div class="now-playing glass"><span class="mono-label">✦ NOW PLAYING</span><b id="npTitle">ASADCORE Anthem</b><div class="big-wave" id="bigWave"></div><button class="btn-primary magnetic" data-nav="music">Open Visualizer →</button></div>
+        <div class="join-card glass"><h3>Join the Journey</h3><p>Be a part of ASADCORE.</p><form id="joinForm"><input type="email" id="joinEmail" placeholder="Enter your email..." required/><button class="btn-primary" type="submit">Subscribe →</button></form><small id="joinMsg"></small></div>
+      </div>
+      <footer class="footer"><span>© 2026 ASADCORE · Built from chaos, code &amp; monsoon rain.</span><span class="mono-label">DHAKA → THE UNIVERSE</span></footer>
+    </section>
+  </main>
+
+  <div id="sceneUI" class="scene-ui ui-layer" hidden>
+    <div class="scene-top"><button class="back-btn glass magnetic" id="backBtn">← Back to the surface</button><div class="scene-title"><span class="mono-label" id="sceneKicker">// EXPERIENCE</span><h2 id="sceneName">History</h2></div><div class="scene-tools"><button class="icon-btn glass" id="sceneMute" aria-label="Mute">🔊</button></div></div>
+    <div id="sceneBody"></div>
+  </div>
+
+  <div id="modal" class="modal" hidden><div class="modal-backdrop"></div><div class="modal-card glass" id="modalCard"></div></div>
+  <div id="toast" class="toast glass" role="status"></div>
+  <div id="whisperLayer" class="whisper-layer" aria-hidden="true"></div>
+  <script type="module" src="/src/main.ts"></script>
+</body>
+</html>
